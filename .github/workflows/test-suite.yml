@@ -1,0 +1,29 @@
+---
+name: run-test-suite
+
+on: [push]
+
+jobs:
+  test-suite:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout@scm
+        uses: actions/checkout@main
+
+      - name: setup@elixir
+        uses: erlef/setup-beam@main
+        with:
+          otp-version: '24.x'
+          elixir-version: '1.12.x'
+
+      - name: deps@mix
+        run: mix deps.get
+
+      - name: compile@mix
+        run: mix compile
+
+      - name: lint@mix
+        run: mix credo --all
+
+      - name: test@mix
+        run: mix test --cover
