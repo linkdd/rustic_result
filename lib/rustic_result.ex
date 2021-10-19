@@ -114,4 +114,16 @@ defmodule Rustic.Result do
   def flatten({:error, {:ok, val}}), do: {:ok, val}
   def flatten({:error, {:error, reason}}), do: {:error, reason}
   def flatten({:error, reason}), do: {:error, reason}
+
+  @doc """
+  Iterate over Results, will fail at the first Error result.
+  """
+  @spec collect(Enumerable.t(t())) :: t()
+  def collect(enumerable) do
+    enumerable |> Enum.map(&unwrap!/1) |> ok()
+  rescue
+    err in UnhandledError ->
+      err(err.reason)
+  end
+
 end

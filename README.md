@@ -94,4 +94,11 @@ ok(err(:failed)) |> flatten()
 
 ok(1) |> flatten()
 # ok(1)
+
+[ok(1), ok(2)] |> collect()
+# ok([1, 2])
+
+[ok(1), err(:not_found)] |> collect()
+# err(:failed)
+
 ```

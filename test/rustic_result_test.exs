@@ -66,4 +66,10 @@ defmodule Rustic.Result.Test do
     assert err(:failed) == err(err(:failed)) |> flatten()
     assert err(:failed) == err(:failed) |> flatten()
   end
+
+  test "collect/1" do
+    assert ok([1, 2]) == [ok(1), ok(2)] |> collect()
+    assert err(:failed) == [ok(1), err(:failed)] |> collect()
+  end
+
 end
