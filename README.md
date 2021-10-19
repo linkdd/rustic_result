@@ -26,11 +26,17 @@ end
 ```elixir
 import Rustic.Result
 
-ok(42)
-# {:ok, 42}
+ok(42) == {:ok, 42}
+# true
 
-err(:not_found)
-# {:error, :not_found}
+err(:not_found) == {:error, :not_found}
+# true
+
+ok(42) |> is_ok?()
+# true
+
+err(:not_found) |> is_err?()
+# true
 
 ok(1) |> and_then(fn v -> ok(v + 1) end)
 # ok(2)
@@ -42,7 +48,7 @@ err(:not_found) |> and_then(fn v -> ok(v + 1) end)
 # err(:not_found)
 
 ok(1) |> or_else(fn _ -> ok(2) end)
-# ok(2)
+# ok(1)
 
 err(:not_found) |> or_else(fn :not_found -> ok(1) end)
 # ok(1)
@@ -54,5 +60,17 @@ ok(1) |> unwrap!()
 # 1
 
 err(:not_found) |> unwrap!()
-# ** (Rustic.Result.UnhandledError) Expected an ok result, ":not_found" given.
+# ** (Rustic.Result.UnhandledError) Expected an Ok result, ":not_found" given.
+
+ok(1) |> unwrap_or(2)
+# 1
+
+err(:not_found) |> unwrap_or(2)
+# 2
+
+ok(1) |> unwrap_err!()
+# ** (Rustic.Result.MissingError) Expected an Err result, "1" given.
+
+err(:not_found) |> unwrap_err!()
+# :not_found
 ```

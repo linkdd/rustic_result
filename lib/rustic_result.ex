@@ -11,7 +11,19 @@ defmodule Rustic.Result do
     @doc "Convert error to string"
     @spec message(%__MODULE__{}) :: String.t()
     def message(e) do
-      "Expected an ok result, \"#{inspect(e.reason)}\" given."
+      "Expected an Ok result, \"#{inspect(e.reason)}\" given."
+    end
+  end
+
+  defmodule MissingError do
+    @moduledoc "Error raised when trying to unwrap an Ok value"
+
+    defexception [:value]
+
+    @doc "Convert error to string"
+    @spec message(%__MODULE__{}) :: String.t()
+    def message(e) do
+      "Expected an Err result, \"#{inspect(e.value)}\" given."
     end
   end
 
@@ -35,10 +47,30 @@ defmodule Rustic.Result do
   @spec err(term()) :: err()
   def err(reason), do: {:error, reason}
 
-  @doc "Unwrap an Ok result, or raise an Err result as an exception"
+  @doc "Returns true if the Result is an Ok value"
+  @spec is_ok?(t()) :: boolean()
+  def is_ok?({:ok, _}), do: true
+  def is_ok?({:error, _}), do: false
+
+  @doc "Returns true if the Result is an Err value"
+  @spec is_err?(t()) :: boolean()
+  def is_err?({:ok, _}), do: false
+  def is_err?({:error, _}), do: true
+
+  @doc "Unwrap an Ok result, or raise an exception"
   @spec unwrap!(t()) :: any()
   def unwrap!({:ok, val}), do: val
   def unwrap!({:error, reason}), do: raise UnhandledError, reason: reason
+
+  @doc "Unwrap an Err result, or raise an exception"
+  @spec unwrap_err!(t()) :: term()
+  def unwrap_err!({:ok, val}), do: raise MissingError, value: val
+  def unwrap_err!({:error, reason}), do: reason
+
+  @doc "Unwrap an Ok result, or return a default value"
+  @spec unwrap_or(t(), any()) :: any()
+  def unwrap_or({:ok, val}, _default), do: val
+  def unwrap_or({:error, _reason}, default), do: default
 
   @doc """
   Apply a function which returns a result to an Ok result, or propagates the

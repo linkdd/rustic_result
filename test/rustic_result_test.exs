@@ -4,12 +4,35 @@ defmodule Rustic.Result.Test do
 
   import Rustic.Result
 
+  test "is_ok?/1" do
+    assert ok(1) |> is_ok?()
+    assert not (err(:failed) |> is_ok?())
+  end
+
+  test "is_err?/1" do
+    assert not (ok(1) |> is_err?())
+    assert err(:failed) |> is_err?()
+  end
+
   test "unwrap!/1" do
     assert 42 == ok(42) |> unwrap!()
 
     assert_raise Rustic.Result.UnhandledError, fn ->
       err(:failed) |> unwrap!()
     end
+  end
+
+  test "unwrap_err!/1" do
+    assert_raise Rustic.Result.MissingError, fn ->
+      ok(42) |> unwrap_err!()
+    end
+
+    assert :failed == err(:failed) |> unwrap_err!()
+  end
+
+  test "unwrap_or/2" do
+    assert 42 == ok(42) |> unwrap_or(43)
+    assert 43 == err(:failed) |> unwrap_or(43)
   end
 
   test "and_then/2" do
