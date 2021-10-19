@@ -99,7 +99,7 @@ ok(1) |> flatten()
 # ok([1, 2])
 
 [ok(1), err(:not_found)] |> collect()
-# err(:failed)
+# err(:not_found)
 
 [ok(1), err(:not_found)] |> filter_collect()
 # ok([1])
