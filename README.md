@@ -1,8 +1,8 @@
 # Rustic Result
 
-![CICD](https://github.com/linkdd/rustic_result/actions/workflows/test-suite.yml/badge.svg)
+[![CICD](https://github.com/linkdd/rustic_result/actions/workflows/test-suite.yml/badge.svg)](https://github.com/linkdd/rustic_result)
 [![Hex.pm](http://img.shields.io/hexpm/v/rustic_result.svg?style=flat)](https://hex.pm/packages/rustic_result)
-![License](https://img.shields.io/hexpm/l/rustic_result)
+[![License](https://img.shields.io/hexpm/l/rustic_result)](https://github.com/linkdd/rustic_result/blob/main/LICENSE.txt)
 [![Hex Docs](https://img.shields.io/badge/hex-docs-lightgreen.svg)](https://hexdocs.pm/rustic_result/)
 
 Result monad for Elixir inspired by Rust
