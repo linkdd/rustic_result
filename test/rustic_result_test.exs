@@ -46,4 +46,14 @@ defmodule Rustic.Result.Test do
     assert ok(42) == err(:failed) |> or_else(fn :failed -> ok(42) end)
     assert err(:failed) == err(:oops) |> or_else(fn :oops -> err(:failed) end)
   end
+
+  test "flatten/1" do
+    assert ok(42) == ok(ok(42)) |> flatten()
+    assert err(:failed) == ok(err(:failed)) |> flatten()
+    assert ok(42) == ok(42) |> flatten()
+
+    assert ok(42) == err(ok(42)) |> flatten()
+    assert err(:failed) == err(err(:failed)) |> flatten()
+    assert err(:failed) == err(:failed) |> flatten()
+  end
 end

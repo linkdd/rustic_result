@@ -73,4 +73,13 @@ ok(1) |> unwrap_err!()
 
 err(:not_found) |> unwrap_err!()
 # :not_found
+
+ok(ok(1)) |> flatten()
+# ok(1)
+
+ok(err(:failed)) |> flatten()
+# err(:failed)
+
+ok(1) |> flatten()
+# ok(1)
 ```

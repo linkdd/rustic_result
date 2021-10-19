@@ -87,4 +87,15 @@ defmodule Rustic.Result do
   @spec or_else(t(), f()) :: t()
   def or_else({:error, reason}, func), do: func.(reason)
   def or_else(ok, _func), do: ok
+
+  @doc """
+  Flatten a result containing another result.
+  """
+  @spec flatten(t()) :: t()
+  def flatten({:ok, {:ok, val}}), do: {:ok, val}
+  def flatten({:ok, {:error, reason}}), do: {:error, reason}
+  def flatten({:ok, val}), do: {:ok, val}
+  def flatten({:error, {:ok, val}}), do: {:ok, val}
+  def flatten({:error, {:error, reason}}), do: {:error, reason}
+  def flatten({:error, reason}), do: {:error, reason}
 end
