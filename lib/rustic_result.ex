@@ -135,9 +135,11 @@ defmodule Rustic.Result do
   end
 
   @doc """
-  Iterate over Results, returns a tuple of Ok results and Err results.
+  Iterate over Results, returns a tuple of:
+   - Ok result containing the list of Ok values
+   - Err result containing the list of Err reasons
   """
-  @spec partition_collect(Enumerable.t(t())) :: {list(ok()), list(err())}
+  @spec partition_collect(Enumerable.t(t())) :: {ok(), err()}
   def partition_collect(enumerable) do
     {
       enumerable |> filter_collect(),
