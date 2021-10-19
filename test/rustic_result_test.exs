@@ -72,4 +72,9 @@ defmodule Rustic.Result.Test do
     assert err(:failed) == [ok(1), err(:failed)] |> collect()
   end
 
+  test "filter_collect/1" do
+    assert ok([1, 2]) == [ok(1), ok(2)] |> filter_collect()
+    assert ok([1]) == [ok(1), err(:failed)] |> filter_collect()
+  end
+
 end

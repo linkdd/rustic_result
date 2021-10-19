@@ -126,4 +126,12 @@ defmodule Rustic.Result do
       err(err.reason)
   end
 
+  @doc """
+  Iterate over Results, will ignore failed items.
+  """
+  @spec filter_collect(Enumerable.t(t())) :: ok()
+  def filter_collect(enumerable) do
+    enumerable |> Enum.filter(&is_ok?/1) |> collect()
+  end
+
 end
