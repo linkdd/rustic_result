@@ -104,4 +104,6 @@ ok(1) |> flatten()
 [ok(1), err(:not_found)] |> filter_collect()
 # ok([1])
 
+[ok(1), err(:not_found)] |> partition_collect()
+# {ok([1]), err([:not_found])}
 ```

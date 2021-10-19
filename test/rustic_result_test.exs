@@ -77,4 +77,8 @@ defmodule Rustic.Result.Test do
     assert ok([1]) == [ok(1), err(:failed)] |> filter_collect()
   end
 
+  test "partition_collect/1" do
+    assert {ok([1, 2]), err([])} == [ok(1), ok(2)] |> partition_collect()
+    assert {ok([1]), err([:failed])} == [ok(1), err(:failed)] |> partition_collect()
+  end
 end

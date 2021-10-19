@@ -134,4 +134,14 @@ defmodule Rustic.Result do
     enumerable |> Enum.filter(&is_ok?/1) |> collect()
   end
 
+  @doc """
+  Iterate over Results, returns a tuple of Ok results and Err results.
+  """
+  @spec partition_collect(Enumerable.t(t())) :: {list(ok()), list(err())}
+  def partition_collect(enumerable) do
+    {
+      enumerable |> filter_collect(),
+      enumerable |> Enum.filter(&is_err?/1) |> Enum.map(&unwrap_err!/1) |> err()
+    }
+  end
 end
