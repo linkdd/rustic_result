@@ -23,6 +23,8 @@ end
 
 ## Usage
 
+**NB:** `:ok` is treated as `{:ok, nil}`
+
 ```elixir
 import Rustic.Result
 
@@ -30,6 +32,9 @@ ok(42) == {:ok, 42}
 # true
 
 err(:not_found) == {:error, :not_found}
+# true
+
+:ok |> is_ok?()
 # true
 
 ok(42) |> is_ok?()
@@ -40,6 +45,9 @@ err(:not_found) |> is_err?()
 
 ok(1) |> map(fn v -> v + 1 end)
 # ok(2)
+
+:ok |> map(fn nil -> 1 end)
+# ok(1)
 
 err(:not_found) |> map(fn v -> v + 1 end)
 # err(:not_found)
@@ -52,6 +60,9 @@ err(:not_found) |> map_err(fn reason -> {:failed, reason} end)
 
 ok(1) |> and_then(fn v -> ok(v + 1) end)
 # ok(2)
+
+:ok |> and_then(fn nil -> ok(1) end)
+# ok(1)
 
 ok(1) |> and_then(fn _ -> err(:not_found) end)
 # err(:not_found)
@@ -71,11 +82,17 @@ err(:not_found) |> or_else(fn :not_found -> err(:invalid) end)
 ok(1) |> unwrap!()
 # 1
 
+:ok |> unwrap!()
+# nil
+
 err(:not_found) |> unwrap!()
 # ** (Rustic.Result.UnhandledError) Expected an Ok result, ":not_found" given.
 
 ok(1) |> unwrap_or(2)
 # 1
+
+:ok |> unwrap_or(1)
+# nil
 
 err(:not_found) |> unwrap_or(2)
 # 2

@@ -28,13 +28,13 @@ defmodule Rustic.Result do
   end
 
   @typedoc "Describe an Ok value"
-  @type ok :: {:ok, any()}
+  @type ok :: :ok | {:ok, any()}
 
   @typedoc "Describe an Err value"
   @type err :: {:error, term()}
 
   @typedoc "Describe a Result type"
-  @type t :: ok | err
+  @type t :: ok() | err()
 
   @typedoc "A function that maps a value to a result"
   @type f :: (any() -> t())
@@ -49,26 +49,31 @@ defmodule Rustic.Result do
 
   @doc "Returns true if the Result is an Ok value"
   @spec is_ok?(t()) :: boolean()
+  def is_ok?(:ok), do: true
   def is_ok?({:ok, _}), do: true
   def is_ok?({:error, _}), do: false
 
   @doc "Returns true if the Result is an Err value"
   @spec is_err?(t()) :: boolean()
+  def is_err?(:ok), do: false
   def is_err?({:ok, _}), do: false
   def is_err?({:error, _}), do: true
 
   @doc "Unwrap an Ok result, or raise an exception"
   @spec unwrap!(t()) :: any()
+  def unwrap!(:ok), do: nil
   def unwrap!({:ok, val}), do: val
   def unwrap!({:error, reason}), do: raise UnhandledError, reason: reason
 
   @doc "Unwrap an Err result, or raise an exception"
   @spec unwrap_err!(t()) :: term()
+  def unwrap_err!(:ok), do: raise MissingError, value: nil
   def unwrap_err!({:ok, val}), do: raise MissingError, value: val
   def unwrap_err!({:error, reason}), do: reason
 
   @doc "Unwrap an Ok result, or return a default value"
   @spec unwrap_or(t(), any()) :: any()
+  def unwrap_or(:ok, _default), do: nil
   def unwrap_or({:ok, val}, _default), do: val
   def unwrap_or({:error, _reason}, default), do: default
 
@@ -77,6 +82,7 @@ defmodule Rustic.Result do
   error.
   """
   @spec map(t(), (any() -> any())) :: t()
+  def map(:ok, func), do: {:ok, func.(nil)}
   def map({:ok, val}, func), do: {:ok, func.(val)}
   def map(err, _func), do: err
 
@@ -85,6 +91,7 @@ defmodule Rustic.Result do
   Ok result.
   """
   @spec map_err(t(), (any() -> any())) :: t()
+  def map_err(:ok, _func), do: :ok
   def map_err({:ok, val}, _func), do: {:ok, val}
   def map_err({:error, reason}, func), do: {:error, func.(reason)}
 
@@ -93,6 +100,7 @@ defmodule Rustic.Result do
   error.
   """
   @spec and_then(t(), f()) :: t()
+  def and_then(:ok, func), do: func.(nil)
   def and_then({:ok, val}, func), do: func.(val)
   def and_then(err, _func), do: err
 
@@ -108,9 +116,12 @@ defmodule Rustic.Result do
   Flatten a result containing another result.
   """
   @spec flatten(t()) :: t()
+  def flatten(:ok), do: :ok
+  def flatten({:ok, :ok}), do: :ok
   def flatten({:ok, {:ok, val}}), do: {:ok, val}
   def flatten({:ok, {:error, reason}}), do: {:error, reason}
   def flatten({:ok, val}), do: {:ok, val}
+  def flatten({:error, :ok}), do: :ok
   def flatten({:error, {:ok, val}}), do: {:ok, val}
   def flatten({:error, {:error, reason}}), do: {:error, reason}
   def flatten({:error, reason}), do: {:error, reason}
