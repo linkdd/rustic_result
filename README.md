@@ -44,6 +44,12 @@ ok(1) |> map(fn v -> v + 1 end)
 err(:not_found) |> map(fn v -> v + 1 end)
 # err(:not_found)
 
+ok(1) |> map_err(fn reason -> {:failed, reason} end)
+# ok(1)
+
+err(:not_found) |> map_err(fn reason -> {:failed, reason} end)
+# err({:failed, :not_found})
+
 ok(1) |> and_then(fn v -> ok(v + 1) end)
 # ok(2)
 

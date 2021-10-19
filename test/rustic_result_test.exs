@@ -40,6 +40,11 @@ defmodule Rustic.Result.Test do
     assert err(:failed) == err(:failed) |> map(fn v -> v + 1 end)
   end
 
+  test "map_err/2" do
+    assert ok(1) == ok(1) |> map_err(fn reason -> {:failed, reason} end)
+    assert err({:failed, :not_found}) == err(:not_found) |> map_err(fn reason -> {:failed, reason} end)
+  end
+
   test "and_then/2" do
     assert ok(42) == ok(41) |> and_then(fn v -> ok(v + 1) end)
     assert err(41) == ok(41) |> and_then(fn v -> err(v) end)

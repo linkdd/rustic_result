@@ -81,6 +81,14 @@ defmodule Rustic.Result do
   def map(err, _func), do: err
 
   @doc """
+  Apply a function to the value contained in an Err result, or propagates the
+  Ok result.
+  """
+  @spec map_err(t(), (any() -> any())) :: t()
+  def map_err({:ok, val}, _func), do: {:ok, val}
+  def map_err({:error, reason}, func), do: {:error, func.(reason)}
+
+  @doc """
   Apply a function which returns a result to an Ok result, or propagates the
   error.
   """
