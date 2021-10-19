@@ -38,6 +38,12 @@ ok(42) |> is_ok?()
 err(:not_found) |> is_err?()
 # true
 
+ok(1) |> map(fn v -> v + 1 end)
+# ok(2)
+
+err(:not_found) |> map(fn v -> v + 1 end)
+# err(:not_found)
+
 ok(1) |> and_then(fn v -> ok(v + 1) end)
 # ok(2)
 

@@ -73,6 +73,14 @@ defmodule Rustic.Result do
   def unwrap_or({:error, _reason}, default), do: default
 
   @doc """
+  Apply a function to the value contained in an Ok result, or propagates the
+  error.
+  """
+  @spec map(t(), (any() -> any())) :: t()
+  def map({:ok, val}, func), do: {:ok, func.(val)}
+  def map(err, _func), do: err
+
+  @doc """
   Apply a function which returns a result to an Ok result, or propagates the
   error.
   """

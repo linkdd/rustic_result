@@ -35,6 +35,11 @@ defmodule Rustic.Result.Test do
     assert 43 == err(:failed) |> unwrap_or(43)
   end
 
+  test "map/2" do
+    assert ok(2) == ok(1) |> map(fn v -> v + 1 end)
+    assert err(:failed) == err(:failed) |> map(fn v -> v + 1 end)
+  end
+
   test "and_then/2" do
     assert ok(42) == ok(41) |> and_then(fn v -> ok(v + 1) end)
     assert err(41) == ok(41) |> and_then(fn v -> err(v) end)
