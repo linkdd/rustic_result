@@ -124,3 +124,19 @@ ok(1) |> flatten()
 [ok(1), err(:not_found)] |> partition_collect()
 # {ok([1]), err([:not_found])}
 ```
+
+With function guards:
+
+```elixir
+import Rustic.Result
+
+def handle_result(val) when is_ok_result(val) do
+  # ...
+end
+def handle_result(val) when is_err_result(val) do
+  # ...
+end
+def handle_result(val) do
+  raise ArgumentError, message: "#{inspect(val)} is not a result"
+end
+```

@@ -59,6 +59,15 @@ defmodule Rustic.Result do
   def is_err?({:ok, _}), do: false
   def is_err?({:error, _}), do: true
 
+  @doc "Is valid if and only if an Ok result is supplied"
+  defguard is_ok_result(val) when
+    val == :ok
+    or (is_tuple(val) and elem(val, 0) == :ok)
+
+  @doc "Is valid if and only if an Err result is supplied"
+  defguard is_err_result(val) when
+    is_tuple(val) and elem(val, 0) == :error
+
   @doc "Unwrap an Ok result, or raise an exception"
   @spec unwrap!(t()) :: any()
   def unwrap!(:ok), do: nil

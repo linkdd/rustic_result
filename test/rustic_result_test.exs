@@ -4,6 +4,28 @@ defmodule Rustic.Result.Test do
 
   import Rustic.Result
 
+  test "is_ok_result/1" do
+    check = fn
+      val when is_ok_result(val) -> true
+      _ -> false
+    end
+
+    assert check.({:ok, 1})
+    assert check.(:ok)
+    assert not check.({:error, :failed})
+  end
+
+  test "is_err_result/1" do
+    check = fn
+      val when is_err_result(val) -> true
+      _ -> false
+    end
+
+    assert not check.({:ok, 1})
+    assert not check.(:ok)
+    assert check.({:error, :failed})
+  end
+
   test "is_ok?/1" do
     assert :ok |> is_ok?()
     assert ok(1) |> is_ok?()
