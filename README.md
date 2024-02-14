@@ -16,7 +16,7 @@ dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:rustic_result, "~> 0.6.0"}
+    {:rustic_result, "~> 0.6.1"}
   ]
 end
 ```
