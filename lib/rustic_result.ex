@@ -72,12 +72,12 @@ defmodule Rustic.Result do
   @spec unwrap!(t()) :: any()
   def unwrap!(:ok), do: nil
   def unwrap!({:ok, val}), do: val
-  def unwrap!({:error, reason}), do: raise UnhandledError, reason: reason
+  def unwrap!({:error, reason}), do: raise(UnhandledError, reason: reason)
 
   @doc "Unwrap an Err result, or raise an exception"
   @spec unwrap_err!(t()) :: term()
-  def unwrap_err!(:ok), do: raise MissingError, value: nil
-  def unwrap_err!({:ok, val}), do: raise MissingError, value: val
+  def unwrap_err!(:ok), do: raise(MissingError, value: nil)
+  def unwrap_err!({:ok, val}), do: raise(MissingError, value: val)
   def unwrap_err!({:error, reason}), do: reason
 
   @doc "Unwrap an Ok result, or return a default value"
