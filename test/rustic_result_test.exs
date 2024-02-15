@@ -4,9 +4,9 @@ defmodule Rustic.Result.Test do
 
   import Rustic.Result
 
-  test "is_ok_result/1" do
+  test "is_ok/1" do
     check = fn
-      val when is_ok_result(val) -> true
+      val when is_ok(val) -> true
       _ -> false
     end
 
@@ -15,9 +15,9 @@ defmodule Rustic.Result.Test do
     assert not check.({:error, :failed})
   end
 
-  test "is_err_result/1" do
+  test "is_err/1" do
     check = fn
-      val when is_err_result(val) -> true
+      val when is_err(val) -> true
       _ -> false
     end
 
@@ -26,16 +26,16 @@ defmodule Rustic.Result.Test do
     assert check.({:error, :failed})
   end
 
-  test "is_ok?/1" do
-    assert :ok |> is_ok?()
-    assert ok(1) |> is_ok?()
-    assert not (err(:failed) |> is_ok?())
+  test "ok?/1" do
+    assert :ok |> ok?()
+    assert ok(1) |> ok?()
+    assert not (err(:failed) |> ok?())
   end
 
-  test "is_err?/1" do
-    assert not (:ok |> is_err?())
-    assert not (ok(1) |> is_err?())
-    assert err(:failed) |> is_err?()
+  test "err?/1" do
+    assert not (:ok |> err?())
+    assert not (ok(1) |> err?())
+    assert err(:failed) |> err?()
   end
 
   test "unwrap!/1" do
