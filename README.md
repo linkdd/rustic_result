@@ -34,13 +34,13 @@ ok(42) == {:ok, 42}
 err(:not_found) == {:error, :not_found}
 # true
 
-:ok |> is_ok?()
+:ok |> ok?()
 # true
 
-ok(42) |> is_ok?()
+ok(42) |> ok?()
 # true
 
-err(:not_found) |> is_err?()
+err(:not_found) |> err?()
 # true
 
 ok(1) |> map(fn v -> v + 1 end)
@@ -130,10 +130,10 @@ With function guards:
 ```elixir
 import Rustic.Result
 
-def handle_result(val) when is_ok_result(val) do
+def handle_result(val) when is_ok(val) do
   # ...
 end
-def handle_result(val) when is_err_result(val) do
+def handle_result(val) when is_err(val) do
   # ...
 end
 def handle_result(val) do
