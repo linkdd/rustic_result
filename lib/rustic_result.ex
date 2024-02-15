@@ -151,7 +151,7 @@ defmodule Rustic.Result do
   """
   @spec filter_collect(Enumerable.t(t())) :: ok()
   def filter_collect(enumerable) do
-    enumerable |> Enum.filter(&is_ok?/1) |> collect()
+    enumerable |> Enum.filter(&ok?/1) |> collect()
   end
 
   @doc """
@@ -163,7 +163,7 @@ defmodule Rustic.Result do
   def partition_collect(enumerable) do
     {
       enumerable |> filter_collect(),
-      enumerable |> Enum.filter(&is_err?/1) |> Enum.map(&unwrap_err!/1) |> err()
+      enumerable |> Enum.filter(&err?/1) |> Enum.map(&unwrap_err!/1) |> err()
     }
   end
 end
